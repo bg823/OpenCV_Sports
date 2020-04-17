@@ -5,22 +5,25 @@ from matplotlib import pyplot as plt
 # 今回はcandyの画像をカラーで読みこむ
 # 画像が作業ディレクトリにある場合は、そのパスを、他のディレクトリにある場合は、フルパスをい入れる必要があります
 # 1でカラー, 0でグレー, -1でアルファチャネルを含む画像を読み込みます
-img = cv2.imread('/your file path/gray_candy.jpg', 0)
+img = cv2.imread('/Users/h-nagaoka/Dev/OpenCV_Sports/images/candy.jpg', 1)
 
 # 塗り潰しで表示
 plt.hist(img.ravel(), 256, [0, 256])
-# プロットの保存
-plt.savefig('result/gray_img_1.png')
+plt.savefig('result/test_img.png')
 
-# gray画像をヒストグラム表示させるために、計算
-# 実線で表示
-gray_img_2 = cv2.calcHist([img], [0], None, [256], [0, 256])
-# 新しく図を作成
+# colorのタプル
+color = ('b', 'g', 'r')
+
 plt.figure()
-# プロット作成
-plt.plot(gray_img_2)
-# プロットの保存
-plt.savefig('result/gray_img_2.png')
+for i, col in enumerate(color):
+    # colorのインデックスとbgrを格納
+    histr = cv2.calcHist([img], [i], None, [256], [0, 256])
+    # ヒストグラムをプロット
+    plt.plot(histr, color=col)
+    # X軸を0-256の間でヒストグラム表を作る
+    plt.xlim([0, 256])
+
+plt.savefig('result/test_img_1.png')
 
 # プロットの表示
 plt.show()
