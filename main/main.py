@@ -16,7 +16,6 @@ plt.figure()
 # colorのタプル
 color = ('b', 'g', 'r')
 
-hist = 0
 for i, col in enumerate(color):
     # colorのインデックスとbgrを格納
     histr = cv2.calcHist([img], [i], None, [256], [0, 256])
