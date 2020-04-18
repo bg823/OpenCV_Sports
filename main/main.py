@@ -1,29 +1,42 @@
+"""
+OpenCV Tutorial Video Capture
+site : https://docs.opencv.org/4.2.0/dd/d43/tutorial_py_video_display.html
+"""
 import cv2
-# ヒストグラム表示に使う
-from matplotlib import pyplot as plt
 
-# 今回はcandyの画像をカラーで読みこむ
-# 画像が作業ディレクトリにある場合は、そのパスを、他のディレクトリにある場合は、フルパスをい入れる必要があります
-# 1でカラー, 0でグレー, -1でアルファチャネルを含む画像を読み込みます
-img = cv2.imread('/Users/h-nagaoka/Dev/OpenCV_Sports/images/candy.jpg', 1)
+# ビデオキャプチャ生成、引数はカメラデバイスの番号
+# 自分がキャプチャしたい、ビデオ番号を指定
+# PCのデフォルトを使う場合は、1 or 0 or -1 その他の可能性もあり
+cap = cv2.VideoCapture(0)
 
-# 塗り潰しで表示
-plt.hist(img.ravel(), 256, [0, 256])
-plt.savefig('result/test_img.png')
+# cap.isOpen()でキャプチャが生成されているか確認することができる
+# return パラメーターは　True or False
+while (cap.isOpened()):
+    # retには、読み込めているかどうかのbool値、frameには1フレームが入ってくる
+    ret, frame = cap.read()
 
-# colorのタプル
-color = ('b', 'g', 'r')
+    # retがTrueじゃなければ、break
+    if not ret:
+        break
 
-plt.figure()
-for i, col in enumerate(color):
-    # colorのインデックスとbgrを格納
-    histr = cv2.calcHist([img], [i], None, [256], [0, 256])
-    # ヒストグラムをプロット
-    plt.plot(histr, color=col)
-    # X軸を0-256の間でヒストグラム表を作る
-    plt.xlim([0, 256])
+    # カラーフレームをグレーフレームに変換(RGB->GRAY)
+    # cvtColor(input_img, flg)
+    gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
-plt.savefig('result/test_img_1.png')
+    # window sizeをdefaultから、X=320, Y=240に変更
+    gray = cv2.resize(gray, dsize=(320, 240))
+    # グレー変換した、フレームをcaputreという名前のWindowで表示
+    cv2.imshow('capture', gray)
 
-# プロットの表示
-plt.show()
+    # escキーが押された場合、ブレークしてwhileを抜ける
+    # 0にすると、キーを受け付けるまで、待機してしまうため、フレームが更新されない
+    # そのため、適切な数値を振る必要がある
+    # 今回の場合、待機は1msecになる
+    if cv2.waitKey(1) & 0xFF == 27:
+        break
+
+# ビデオファイルまたは、キャプチャデバイスを閉じる
+cap.release()
+
+# 表示している画面を破棄
+cv2.destroyAllWindows()
