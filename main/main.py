@@ -1,43 +1,24 @@
-# create 3images, blue/red/green
 
-import numpy as np  # import numpy
-import cv2  # import opencv
+import sys # import system
+import cv2 # import opencv
 
-# initialize with 0.
-# create Three-dimensional array is type uint8
-img1 = np.zeros((400, 400, 3), np.uint8)
 
-# create background black in blue line circle image
-# from center 200px, 200px and  50px radius, 1px line
-cv2.circle(img1, (200, 200), 50, (255, 0, 0), 1)
+img = cv2.imread('/Users/h-nagaoka/Dev/OpenCV_Sports/images/bg823.png')
 
-# save circle image and show
-cv2.imwrite('result/circle1.png', img1)
-cv2.imshow('circle1', img1)
+# if can't read it exit
+if img is None:
+    sys.exit()
 
-# initialize with 0.
-# create Three-dimensional array is type uint8
-img2 = np.zeros((400, 400, 3), np.uint8)
+# create 3 line colors on read image
+# writing line is Coordinate X50Y50-X200-Y50 and X50Y100-X200Y100 and X100Y150-X200Y150
+# thickness 5 and 10px
+cv2.line(img, (50, 50), (200, 50), (255, 0, 0))
+cv2.line(img, (50, 100), (200, 100), (0, 255, 0), 5)
+cv2.line(img, (100, 150), (200, 150), (0, 0, 255), 10)
 
-# create background black in green line circle image
-# from center 200px, 200px and  100px radius, 3px line
-cv2.circle(img2, (200, 200), 100, (0, 255, 0), 3)
-
-# save circle image and show
-cv2.imwrite('result/circle2.png', img2)
-cv2.imshow('circle2', img2)
-
-# initialize with 0.
-# create Three-dimensional array is type uint8
-img3 = np.zeros((400, 400, 3), np.uint8)
-
-# create background black in green line circle image
-# from center 200px, 200px and  50px radius, 1px line
-cv2.circle(img3, (200, 200), 150, (0, 0, 255), -1)
-
-# save circle image and show
-cv2.imwrite('result/circle3.png', img3)
-cv2.imshow('circle3', img3)
+# save image and show
+cv2.imwrite('result/line.png', img)
+cv2.imshow('line', img)
 
 # end when key is pressed and close windows
 cv2.waitKey(0)
