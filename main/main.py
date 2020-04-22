@@ -10,14 +10,12 @@ if img is None:
     sys.exit()
 
 
-# writing circle on image
-# color is green and skyblue? and yellow
-cv2.circle(img, (50, 50), 40, (0, 255, 0), 2)
-cv2.circle(img, (150, 150), 80, (255, 255, 0), 6)
-cv2.circle(img, (200, 200), 50, (0, 255, 255), -1)
+# Draw Hello OpenCV on image
+# putText Parameters(img, putText, Lower left Coordinate, Font, font scale, font color, thickness)
+cv2.putText(img, 'Hello OpenCV', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (50, 60, 80), 2)
 
 # save image and show
-cv2.imwrite('result/line.png', img)
+cv2.imwrite('result/hello_opencv.png', img)
 cv2.imshow('line', img)
 
 # end when key is pressed and close windows
