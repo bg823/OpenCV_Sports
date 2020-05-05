@@ -9,12 +9,12 @@ import numpy as np
 # 真っ黒なイメージを作成 width height共に512PX
 img = np.zeros((512, 512, 3), np.uint8)
 
-# 緑色の矩形(長方形)を3PXで描く
-# cv2.rectangle(書き込むイメージ, 矩形の頂点, 矩形の頂点の反対側の頂点, 色, 太さ(厚み))
-cv2.rectangle(img, (384, 0), (510, 128), (0, 255, 0), 3)
+# 青の楕円を描く
+# cv2.ellipse(書き込むイメージ,　楕円の中心, 幅, 楕円回転角度, 楕円弧の開始角度, 楕円弧の終了角度, 色, 太さ)
+cv2.ellipse(img, (256, 256), (100, 50), 0, 0, 180, (255, 0, 0), -1)
 
 # 画像の表示
-cv2.imshow('rectangle windwow', img)
+cv2.imshow('ellipse windwow', img)
 
 # 何かしらのキーが押されたら、表示しているwindowを破棄する
 cv2.waitKey(0)
