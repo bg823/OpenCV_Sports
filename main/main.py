@@ -1,59 +1,51 @@
 """
-Mouse as a Paint-Brush in OpenCV
-reference site : https://docs.opencv.org/4.2.0/db/d5b/tutorial_py_mouse_handling.html
+Trackbar as the Color Palette
+reference site : https://docs.opencv.org/4.2.0/d9/dc8/tutorial_py_trackbar.html
+result url : https://gyazo.com/8c3f57edd605dc18beaf683b778aa46b
 """
 import cv2
 import numpy as np
 
-drowing = False
-mode = True
-ix, iy = -1, -1
+
+# 何もしないコールバック関数
+def nothing(x):
+    pass
 
 
-# マウスコールバック関数
-def drow_circle(event, x, y, flags, param):
-    global ix, iy, drowing, mode
+# X = 512 Y = 300の黒いWindowを作成
+img = np.zeros((300, 512, 3), np.uint8)
+cv2.namedWindow('image')
 
-    # print(mode)
+# 色を変えることができる、トラックバーを作成する
+# トラックバー名, windowの名前, スライダーの初めの位置, スライダーのMAX値, onChange
+cv2.createTrackbar('R', 'image', 0, 255, nothing)
+cv2.createTrackbar('G', 'image', 0, 255, nothing)
+cv2.createTrackbar('B', 'image', 0, 255, nothing)
 
-    # マウスの左ボタンが押された場合
-    if event == cv2.EVENT_LBUTTONDOWN:
-        drowing = True
-        ix, iy = x, y
-    # マウスポインタがウィンドウ上に移動した
-    elif event == cv2.EVENT_MOUSEMOVE:
-        if drowing == True:
-            if mode == True:
-                # 四角を描画する
-                cv2.rectangle(img, (ix, iy), (x, y), (0, 255, 0), -1)
-            else:
-                # 円を描画する
-                cv2.circle(img, (x, y), 5, (0, 0, 255), -1)
-    # マウスの左ボタンが離された
-    elif event == cv2.EVENT_LBUTTONUP:
-        drowing = False
-        if mode == True:
-            # 四角を描画する
-            cv2.rectangle(img, (ix, iy), (x, y), (0, 255, 0), -1)
-        else:
-            # 円を描画する
-            cv2.circle(img, (x, y), 5, (0, 0, 255), -1)
-
-
-# イメージの作成とwindowの作成、setMouseCallbackにバインド
-img = np.zeros((512, 512, 3), np.uint8)
-cv2.namedWindow('img')
-# drow_circleには、自分の行ったマウスの操作・そのXY座標、フラグ、ユーザーオプションのパラメータが入ってくる
-cv2.setMouseCallback('img', drow_circle)
+# 関数のON/OFFスイッチを作成
+# 0 = 色は変化しない, 1 = 色の変化をさせる
+switch = '0 : OFF \n1 : ON'
+cv2.createTrackbar(switch, 'image', 0, 1, nothing)
 
 while (1):
-    cv2.imshow('img', img)
-    # Tabが押されたら、modeをFalseに設定
-    key = cv2.waitKey(1) & 0xFF
-    if key == 9:
-        mode = not mode
-        # escが押されたら、window破棄
-    elif key == 27:
+    cv2.imshow('image', img)
+    k = cv2.waitKey(1) & 0xFF
+    if k == 27:
         break
 
+    # どの位置にトラックバーがあるか取得する
+    # # トラックバーの名前, Windowの名前
+    r = cv2.getTrackbarPos('R', 'image')
+    g = cv2.getTrackbarPos('G', 'image')
+    b = cv2.getTrackbarPos('B', 'image')
+    s = cv2.getTrackbarPos(switch, 'image')
+
+    # switchが0の場合は、色を変化させない.
+    # 0出なかった場合は、r/g/bの現在の値をimg配列に代入する
+    if s == 0:
+        img[:] = 0
+    else:
+        img[:] = [b, g, r]
+
+# 全てWindowを破棄する
 cv2.destroyAllWindows()
